@@ -1,0 +1,45 @@
+.contentContainer{
+    margin-top: 20px;
+    background: #ffffff;
+    padding: 20px;
+}
+.filterWrapper{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+}
+.search{
+ display: flex;
+ align-items: center;
+ position: relative;
+}
+.gridContainer{
+    padding-top: 20px;
+}
+.categories{
+    
+}
+.categories > p{
+    text-align: center;
+    display: block;
+    cursor: pointer;
+}
+.content{
+}
+.searchResult {
+    top: 50px;
+    left: -10px;
+    background: white;
+    z-index: 5;
+    flex-direction: column;
+    position: absolute;
+    padding: 15px;
+}
+.searchResult > p {
+    cursor: pointer;
+}
+@media (max-width: 425px){
+    .categories > p{
+        font-size: 10px;
+    }
+}

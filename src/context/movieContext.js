@@ -10,6 +10,7 @@ const MovieData = props => {
     const [genre, setGenre] = useState([]);
     const [id, setId] = useState([])
     const [movieDetail, setMovieDetail] = useState([])
+    const [filteredData, setFilteredData] = useState([])
     const [text, setText] = useState('');
     useEffect(() => {
         async function getData() {
@@ -36,7 +37,7 @@ const MovieData = props => {
     }, [id])
 
     return(
-        <MovieContext.Provider value={{ data, genre, setText, text, id, setId, movieDetail}}>
+        <MovieContext.Provider value={{ data, genre, setText, text, id, setId, movieDetail, filteredData, setFilteredData}}>
             {props.children}
         </MovieContext.Provider>
     )

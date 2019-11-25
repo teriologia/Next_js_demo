@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
 import Link from 'next/link'
 import { MovieContext } from '../../context/movieContext';
-import search, { getSingleMovie } from '../../helpers/searchHelper';
-import { TextField, Grid, Paper, Card, CardActionArea, CardMedia, makeStyles, GridListTileBar } from '@material-ui/core';
+import {search, searchGenre} from '../../helpers';
+import ContentCard from '../ContentCard';
+import { TextField, Grid, Paper, makeStyles } from '@material-ui/core';
 import './styles.css';
 
 const useStyles = makeStyles( theme => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles( theme => ({
 }));
 
 const Content = (props) => {
-    const { genre, data, text, setText } = useContext(MovieContext);
+    const { genre, data, text, setText, setFilteredData, filteredData } = useContext(MovieContext);
     const [t, setSearchResult] = useState([]);
     const classes = useStyles();
     return (
@@ -57,32 +58,32 @@ const Content = (props) => {
             <Grid container spacing={3} className='gridContainer'>
                 <Grid item xs={9} className='content'>
                         <Grid container spacing={1}>
-                            {data.results ? (data.results.map(el => {
-                                const url = 'https://image.tmdb.org/t/p/w500' + el.poster_path;
-                                return (
-                                    <Grid item key={el.id}>
-                                        <Paper className={classes.paper}>
-                                            <Card className={classes.card} >
-                                                <CardActionArea>
-                                                    <CardMedia
-                                                        className={classes.media}
-                                                        image={url}
-                                                    />
-                                                    <GridListTileBar
-                                                        className={classes.tileBar}
-                                                        title={el.title}
-                                                    />
-                                                </CardActionArea>
-                                            </Card>
-                                        </Paper>
-                                    </Grid>
-                                )
-                            })) : null}
+                        {filteredData.results ? (filteredData.results.map(el => (
+                            <Grid item key={el.id}>
+                                <Paper className={classes.paper}>
+                                    <ContentCard filteredData={el} />
+                                </Paper>
+                            </Grid>
+                            ))) : data.results ? (data.results.map(el => (
+                                <Grid item key={el.id}>
+                                    <Paper className={classes.paper}>
+                                        <ContentCard data={el} />
+                                    </Paper>
+                                </Grid>
+                            ))): null}
                         </Grid>   
                 </Grid>
                 <Grid item xs={3}>
                     <Paper className={classes.genre}>
-                        <div className="categories">{genre.genres && (genre.genres.map(el => (<p onClick={() => console.log(el.id)}>{el.name}</p>)))}</div>
+                        <div className="categories">
+                            <p onClick={() => {
+                                setFilteredData([])
+                            }}>Popular</p>
+                        {genre.genres && (genre.genres.map(el => (<p key={el.id} onClick={async() => {
+                            const data = await searchGenre(el.id)
+                            setFilteredData(data)
+                        }}>{el.name}</p>)))}
+                        </div>
                     </Paper>
                 </Grid>
             </Grid>
@@ -91,3 +92,22 @@ const Content = (props) => {
 }
 
 export default Content;
+
+
+
+/* <Grid item key={el.id}>
+    <Paper className={classes.paper}>
+        <Card className={classes.card} >
+            <CardActionArea>
+                <CardMedia
+                    className={classes.media}
+                    image={url}
+                />
+                <GridListTileBar
+                    className={classes.tileBar}
+                    title={el.title}
+                />
+            </CardActionArea>
+        </Card>
+    </Paper>
+</Grid> */

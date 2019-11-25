@@ -1,0 +1,25 @@
+.detailContainer{
+    margin-top: 20px;
+}
+.genresContainer{
+    margin-top: 25px;
+}
+.genresContainer > span{
+    font-size: 20px;
+    font-weight: bold;
+}
+.genresContainer > p{
+    display: inline-flex;
+    margin-right: 10px;
+}
+.detailTextContainer{
+    padding: 25px;
+}
+.detailText{
+    margin-top: 35px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 25px;
+}
+.detailImage {
+    width: 100%;
+}

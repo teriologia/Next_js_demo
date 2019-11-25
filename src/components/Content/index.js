@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
+import Link from 'next/link'
 import { MovieContext } from '../../context/movieContext';
-import search from '../../helpers/searchHelper';
+import search, { getSingleMovie } from '../../helpers/searchHelper';
 import { TextField, Grid, Paper, Card, CardActionArea, CardMedia, makeStyles, GridListTileBar } from '@material-ui/core';
 import './styles.css';
 
@@ -15,15 +16,18 @@ const useStyles = makeStyles( theme => ({
     tileBar: {
         minHeight: 75 
     },
-    paper: {
+    paper: {    
         height: 500,
         width: 250,
     },
+    genre: {
+        paddingTop: 10,
+        paddingBottom: 10,
+    }
 }));
 
 const Content = (props) => {
-    const { genre, data} = useContext(MovieContext);
-    const [text, setText] = useState('');
+    const { genre, data, text, setText } = useContext(MovieContext);
     const [t, setSearchResult] = useState([]);
     const classes = useStyles();
     return (
@@ -31,7 +35,8 @@ const Content = (props) => {
             <div className='contentContainer'>
                 <div className='filterWrapper'>
                     <div className='search'>
-                        <TextField 
+                        <TextField
+                        value={text}
                         onChange={async(e) => {
                             setText(e.target.value)
                             let tests = []
@@ -39,13 +44,19 @@ const Content = (props) => {
                             setSearchResult(tests)
                         }} 
                         placeholder='Search' color={'primary'} />
-                        {t.results ? (<div className='searchResult'>{t.results.map(el => (<p onClick={() => console.log(el.id)}>{el.name}</p>))}</div>): null}
+                        {t.results && text.length > 3 ? (<div className='searchResult'>{t.results.map((el) => (
+                        <Link href={{pathname: '/detail', query: {id: el.id}}} >
+                        <p onClick={() => {
+                            setText('')
+                        }}>{el.name}</p>
+                        </Link>
+                        ))}</div>): null}
                     </div>
                 </div>
             </div>
             <Grid container spacing={3} className='gridContainer'>
                 <Grid item xs={9} className='content'>
-                    <Grid container spacing={1}>
+                        <Grid container spacing={1}>
                             {data.results ? (data.results.map(el => {
                                 const url = 'https://image.tmdb.org/t/p/w500' + el.poster_path;
                                 return (
@@ -66,12 +77,12 @@ const Content = (props) => {
                                         </Paper>
                                     </Grid>
                                 )
-                            })): null}
-                    </Grid>
+                            })) : null}
+                        </Grid>   
                 </Grid>
                 <Grid item xs={3}>
-                    <Paper>
-                        <div className="categories">{genre.genres && (genre.genres.map(el => (<p>{el.name}</p>)))}</div>
+                    <Paper className={classes.genre}>
+                        <div className="categories">{genre.genres && (genre.genres.map(el => (<p onClick={() => console.log(el.id)}>{el.name}</p>)))}</div>
                     </Paper>
                 </Grid>
             </Grid>

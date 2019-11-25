@@ -1,19 +1,20 @@
 import React from 'react';
-import { Layout, Content } from '../src/components';
+import { Layout, Detail } from '../src/components';
+import { withRouter } from 'next/router'
 import Container from '@material-ui/core/Container';
 import MovieProvider from '../src/context/movieContext';
 
-const index = (props) => {
+const detail = ({router: {query}}) => {
     return (
         <MovieProvider>
             <Container className='main'>
                 <Layout >
-                    <Content />
+                    <Detail id={query.id} />
                 </Layout>
             </Container>
         </MovieProvider>
     )
 }
 
-export default index;
+export default withRouter(detail);
 

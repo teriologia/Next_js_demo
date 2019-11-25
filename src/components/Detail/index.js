@@ -8,6 +8,9 @@ const Detail = (props) => {
     const { movieDetail, setId } = useContext(MovieContext)
     setId(props.id)
     const url = 'https://image.tmdb.org/t/p/w500' + movieDetail.backdrop_path;
+    if(movieDetail.status_code == 34){
+        return <p>There is no info for this movie</p>
+    }
     return (
         <React.Fragment>
             <Grid container className='detailContainer' >
